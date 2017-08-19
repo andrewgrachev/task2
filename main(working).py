@@ -56,8 +56,7 @@ for dIrect in choices:
             print("EBUSHKI VOROBUSHKI")
 
         #imageArrayDataReshaped = np.reshape(imageArrayData, (128,128,3))
-        #видимо надо тут проверить если это 2д - делать ее в 3д. или
-        #момент кое что чекну
+
         print(imageArrayData.shape)
         if imageArrayData.shape == (128, 128, 3):
             images.append(imageArrayData)
