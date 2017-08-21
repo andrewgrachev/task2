@@ -1,10 +1,7 @@
-import os
+import os, math
 import numpy as np
 from PIL import Image
 import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-#from skimage import data, io, filters
-
 
 Dir = input("Dir: ")
 
@@ -30,12 +27,14 @@ def reshape_array(inputArray):
 
     return result
 
+
 allimages = []
 os.chdir(Dir)
 choices = []
 directory = os.listdir(Dir)
 choices = np.random.choice(directory, K, replace=False)
 dIrects = []
+figures = {}
 
 for dIrect in choices:
     os.chdir(Dir + "/" + dIrect)
@@ -61,27 +60,23 @@ for dIrect in choices:
     arr = np.array(np.mean(images, axis=(0)), dtype=np.uint8)
     out = Image.fromarray(arr)
     allimages.append(arr)
-    #out.show()
+    figures[dIrect] = out
+    # out.show()
+
+Nr = round(math.sqrt(K))
+Nc = round(math.sqrt(K))
+if Nr + Nc > K:
+    Nr = Nr + 1
 
 
-
-def plot_figures(figures, nrows = 4, ncols=4):
-    """Plot a dictionary of figures.
-
-    Parameters
-    ----------
-    figures : <title, figure> dictionary
-    ncols : number of columns of subplots wanted in the display
-    nrows : number of rows of subplots wanted in the figure
-    """
-
+def plot_figures(figures, nrows=Nr, ncols=Nc):
     fig, axeslist = plt.subplots(ncols=ncols, nrows=nrows)
-    for ind,title in zip(range(len(figures)), figures):
+    for ind, title in zip(range(len(figures)), figures):
         axeslist.ravel()[ind].imshow(figures[title])
         axeslist.ravel()[ind].set_title(title)
         axeslist.ravel()[ind].set_axis_off()
-    plt.tight_layout() # optional
+    # plt.tight_layout() # optional
+    plt.show()
 
 
-figures = {dIrects:allimages for dIrects in range(K)}
-plot_figures(figures, 4, 4)
+plot_figures(figures, Nr, Nc)
